@@ -341,10 +341,13 @@ def get_ansible_asset_info(asset_ip, setup_info):
         cpu_type = ' '.join(setup_info.get("ansible_processor")[0].split(' ')[:6])
 
     memory = setup_info.get("ansible_memtotal_mb")
-    try:
-        memory_format = int(round((int(memory) / 1000), 0))
-    except Exception:
-        memory_format = memory
+	if memory < 600:
+		memory_format = int(memory) / 1000
+	else:
+		try:
+			memory_format = int(round((int(memory) / 1000), 0))
+		except Exception:
+			memory_format = memory
     disk = disk_need
     system_type = setup_info.get("ansible_distribution")
     if system_type.lower() == "freebsd":
